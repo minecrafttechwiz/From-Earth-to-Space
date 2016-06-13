@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <meta charset="UTF-8">
+        <script src="https://code.jquery.com/jquery-3.0.0.min.js"></script>
+        <script>
+            window.save = {};
+            function saveDown() {
+                var data = "text/json; charset=utf-8, " + encodeURIComponent(JSON.stringify(save));
+                $("body").append('<a href="data:' + data + '" download="data.json" style="visibility: hidden" id="download"></a>');
+                $("#download")[0].click();
+                $("#download").remove();
+            }
+            function load() {
+                $("#load").show();
+                function handleFileSelect() {
+                    var files = document.getElementById("load").files;
+                    var file = files[0];
+                    var reader = new FileReader();
+                    reader.onloadend = function(evt) {
+                        console.log(evt.target.readyState);
+                        if (evt.target.readyState == FileReader.DONE) {
+                            save = JSON.parse(evt.target.result);
+                            $("#load").hide();
+                        }
+                    };
+                    reader.readAsBinaryString(file);
+                }
+                document.getElementById("load").addEventListener('change', handleFileSelect, false);
+            }
+            function nameSubmit() {
+                save.name = $("#nameValue").val;
+                $("#name").hide();
+                $("#saving").show();
+            }
+        </script>
+        <title>Game | FETS</title>
+    </head>
+    <body>
+        <h1>From Earth to Space: a Survival Adventure</h1>
+        <div id="name">
+            <p>So, what's your name?</p>
+            <input type="text" id="nameValue" value="Aiden">
+            <button id="nameSubmit" onclick="nameSubmit()">Submit</button>
+        </div>
+    </body>
+    <footer>
+        <p>Copyright 2016 Brian Vo <button onclick="load()">Load Game</button> <input type="file" id="load" class="all"> <button onclick="saveDown()" class="all" id="saving">Save Game</button></p>
+    </footer>
+    <script>
+        $(".all").hide();
+    </script>
+</html>

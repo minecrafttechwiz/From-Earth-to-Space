@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <meta charset="UTF-8">
+        <title>Download Gateway | FETS</title>
+        <script>
+            function game() {
+                window.location = "game.html";
+            }
+            function home() {
+                window.loaction = "/";
+            }
+        </script>
+    </head>
+    <body>
+        <h1>From Earth to Space: a Survival Adventure</h1>
+        <h2 id="message">Please wait while your game is donwloading.</h2>
+        <script>
+            var online = navigator.onLine;
+            if (online == true) {
+                if ('serviceWorker' in navigator) {
+                    navigator.serviceWorker.register('sw.js').then(function(registration) {
+                        console.log('ServiceWorker registration successful with scope: ', registration.scope);
+                        document.getElementById("message").innerHTML = "Download successful! <button onclick='game()'>Continue</button>";
+                    }).catch(function(err) {
+                        console.log('ServiceWorker registration failed: ', err);
+                        document.getElementById("message").innerHTML = "Something went wrong. Please try again later. <button onclick='home()'>Return Home</button>";
+                    });
+                }
+            } else {
+                document.getElementById("message").innerHTML = "Download has already occured. Client is also offline. <button onclick='game()'>Continue</button>";
+            }
+        </script>
+    </body>
+</html>
