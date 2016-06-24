@@ -4,22 +4,59 @@
         <meta name="viewport" content="width=device-width, initial-scale=1">
         <meta charset="UTF-8">
         <title>Home | FETS</title>
+        <style>
+            html, body {
+                margin: 0;
+                padding: 0;
+                height: 100%;
+                text-align: center;
+            }
+            #wrapper {
+                min-height: 100%;
+                position: relative;
+            }
+            #header {
+                background: gray;
+                padding: 10px;
+            }
+            #content {
+                padding-bottom: 100px;
+            }
+            #footer {
+                width: 100%;
+                height: 100px;
+                position: absolute;
+                bottom: 0;
+                left: 0;
+            }
+        </style>
         <script>
         function startGame() {
             window.location = "game";
         }
+        function returnFalse() { 
+          return false;
+        };
         </script>
     </head>
     <body>
-        <h1>From Earth to Space: a Survival Adventure</h1>
-        <h2>How to Play</h2>
-        <p>Just learn the ropes! Follow your instinct. And whaterver you do, don't die.</p>
-        <h2>Background Info (Storyline)</h2>
-        <p>You are a space engineer, casted off Earth into the deep depths of the universe. You are alone, and on an Earth-like planet, and you have to fend for yourself.</p>
-        <h2>Getting Started</h2>
-        <h3>Some Stuff to Know</h3>
-        <p>The game will be saved <a href="https://a-text-based-adventure-minecrafttechwiz1.c9users.io/game/">here</a>. Use that link as your bookmark.</p>
-        <p>This entirely text-based game can be downloaded at your fingertips. Once you press <button onclick="startGame()">Start</button> it will be downloaded. Don't forget to hit save!</p>
-        <p>If you want to know what is happening behind the scenes, look at my <a href="README.md">README</a> page.</p>
+        <div id="wrapper">
+            <div id="header">
+                <h1>From Earth to Space: a Survival Adventure</h1>
+            </div>
+            <div id="content">
+                <h2>How to Play</h2>
+                <p>Just learn the ropes! Follow your instinct. And whatever you do, don't die.</p>
+                <h2>Background Info (Storyline)</h2>
+                <p>You are a space engineer, casted off Earth into the deep depths of the universe. You are alone on an Earth-like planet, and you have to fend for yourself.</p>
+                <h2>Getting Started</h2>
+                <h3>Some Stuff to Know</h3>
+                <p>Please read the README, which is located on my <a href="https://github.com/minecrafttechwiz/From-Earth-to-Space">Github</a>.</p>
+                <p>This entirely text-based game can be downloaded at your fingertips. See my README for more information.</p>
+                <p>If you want to know what is happening behind the scenes, see my <a href="https://github.com/minecrafttechwiz/From-Earth-to-Space">Github</a> page.</p>
+            </div>
+            <div id="footer">
+                Copyright 2016 Brian Vo
+            </div>
     </body>
 </html>
