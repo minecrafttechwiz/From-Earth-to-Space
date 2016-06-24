@@ -12,6 +12,9 @@
     ----------------------------------------------------------------------------------------------------
                                                                                                     
                                                                                                     
+#Current Version
+Beta Release: 0.0.1
+
 # How to Install
 Actually, all you have to do is press save. It's that easy! This game also runs offline.
 
