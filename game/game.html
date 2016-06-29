@@ -6,100 +6,19 @@
         <meta name="mobile-web-app-capable" content="yes">
         <meta charset="UTF-8">
         <script src="https://code.jquery.com/jquery-3.0.0.min.js"></script>
-        <style>
-            html, body {
-                margin: 0;
-                padding: 0;
-                height: 100%;
-                text-align: center;
-            }
-            #wrapper {
-                min-height: 100%;
-                position: relative;
-            }
-            #header {
-                background: gray;
-                padding: 10px;
-            }
-            #content {
-                padding-bottom: 100px;
-            }
-            #footer {
-                width: 100%;
-                height: 100px;
-                position: absolute;
-                bottom: 0;
-                left: 0;
-            }
-            a {
-                color: black;
-            }
-            a:link {
-                text-decoration: none;
-            }
-            a:visited {
-                text-decoration: none;
-            }
-            a:hover {
-                text-decoration: underline;
-            }
-        </style>
-        <script>
-            window.save = {};
-            function cancelLoad() {
-                $("#load").hide();
-                $("#loadCancel").hide();
-            }
-            function addText(gameEvent) {
-                $("#name").hide();
-                $("#display").empty();
-                switch (gameEvent) {
-                    case "intro1":
-                        $("#display").append("<h2>Introductions</h2><p>Ah, right. My name is " + save.name + " and I'm an aerospace engineer. Or used to be. After I became a whistleblower, the company ousted me, unconcious, into the depths of space hell.</p>");
-                        break;
-                }
-            }
-            function saveDown() {
-                var data = "text/json; charset=utf-8, " + encodeURIComponent(JSON.stringify(save));
-                $("body").append('<a href="data:' + data + '" download="data.json" style="visibility: hidden" id="download"></a>');
-                $("#download")[0].click();
-                $("#download").remove();
-            }
-            function load() {
-                $("#load").show();
-                $("#loadCancel").show();
-                function handleFileSelect() {
-                    var files = document.getElementById("load").files;
-                    var file = files[0];
-                    var reader = new FileReader();
-                    reader.onloadend = function(evt) {
-                        if (evt.target.readyState == FileReader.DONE) {
-                            save = JSON.parse(evt.target.result);
-                            $("#load").hide();
-                            $("#loadCancel").hide();
-                            addText(save.progress);
-                            $("#display").show();
-                        }
-                    };
-                    reader.readAsBinaryString(file);
-                }
-                document.getElementById("load").addEventListener('change', handleFileSelect, false);
-            }
-            function nameSubmit() {
-                save.name = $("#nameValue").val();
-                $("#name").hide();
-                $("#saving").show();
-                save.progress = "intro1";
-                addText("intro1");
-                $("#display").show();
-            }
-        </script>
+        <link rel="stylesheet" href="style.css" type="text/css" />
+        <script src="main.js"></script>
         <title>Game | FETS</title>
     </head>
     <body>
         <div id="wrapper">
             <div id="header">
                 <h1>From Earth to Space: a Survival Adventure</h1>
+            </div>
+            <div id="sidebar1">
+                <p id="health" class="all">Health: 100</p>
+                <p id="hunger" class="all">Hunger: 100</p>
+                <p id="time" class="all">Time: 0</p>
             </div>
             <div id="content">
                 <div id="name">
@@ -109,18 +28,20 @@
                 </div>
                 <div id="display" class="all"></div>
             </div>
+            <div id="sidebar"></div>
             <div id="footer">
                 <p>
                     Copyright 2016 Brian Vo
-                    <button onclick="load()">Load Game</button>
-                    <input type="file" id="load" class="all">
-                    <a href="#" onclick="cancelLoad()" id="loadCancel" class="all">x</a>
-                    <button onclick="saveDown()" class="all" id="saving">Save Game</button>
+                    <button onclick="functionLoad('load')" id="load">Load Game</button>
+                    <button onclick="functionLoad('save')" class="all" id="saving">Save Game</button>
                 </p>
             </div>
-	    </div>
+        </div>
     </body>
     <script>
+        if (!localStorage.save) {
+            $("#load").hide();
+        }
         $(".all").hide();
     </script>
 </html>
