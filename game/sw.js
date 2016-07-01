@@ -1,7 +1,9 @@
 var CACHE_NAME = 'game-cache';
 var urlsToCache = [
     "/game/index.html",
-    "/game/game.html"
+    "/game/game.html",
+    "/game/main.js",
+    "/game/style.css"
 ];
 
 self.addEventListener('install', function(event) {
