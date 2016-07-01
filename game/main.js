@@ -1,18 +1,26 @@
-saveKey = {health: 100, hunger: 100, time: 0};
+var saveKey = {health: 100, hunger: 100, wood: 0, twigs: 0, tools: {axe: 0, tape: 10}};
 
-function loadFurther() {
-    set_health(saveKey.health);
-    set_hunger(saveKey.hunger);
+function reset() {
+    var resetConfirm = confirm("Are you sure you want to reset? (All progress will be lost forever.)");
+    if (resetConfirm == true) {
+        saveKey = {health: 100, hunger: 100, wood: 0};
+        addText("name");
+        localStorage.removeItem("save");
+        notify("Reset Complete");
+    } else {
+        notify("Reset Averted");
+    }
 }
 
-function set_health(newHealth) {
-    saveKey.health = newHealth;
-    $("#health").text("Health: " + newHealth);
-}
-
-function set_hunger(newHunger) {
-    saveKey.hunger = newHunger;
-    $("#hunger").text("Hunger: " + newHunger);
+function start_clock() {
+    setTimeout(function() {
+        var clock = timeItself();
+        clock.done(function(newTime){
+            saveKey.time = newTime;
+            $("#time").text("Time: " + newTime);
+        });
+        start_clock();
+    }, 50);
 }
 
 function notify(message) {
@@ -22,9 +30,6 @@ function notify(message) {
 
 function functionLoad(func) {
     switch (func) {
-        case "load":
-            var functionDone = load();
-            break;
         case "save":
             var functionDone = saveDown();
             break;
@@ -47,55 +52,24 @@ function randomChance(material) {
     }
 }
 
-function addText(gameEvent) {
-    $("#name").hide();
-    $("#display").empty();
-    switch (gameEvent) {
-        case "intro1":
-            saveKey.progress = "intro1";
-            $("#saving").show();
-            $("#hunger").show();
-            $("#health").show();
-            $("#time").show();
-            $("#display").append(
-                "<h2>Introductions</h2>"
-                + "<p>Ah, right. My name is " + saveKey.name + " and I'm an aerospace engineer. Or used to be. After I became a whistleblower, the company ousted me, unconcious, into the depths of space hell.</p>"
-                + "<button onclick=\"addText('intro2')\">Next</button>"
-            );
-            break;
-        case "intro2":
-            saveKey.progress = "intro2";
-            $("#display").append(
-                "<h2>Introductions</h2>"
-                + "<p>I just woke up on this planet. I think this planet looks a lot like Earth, and if I try hard enough...</p>"
-                + "<button onclick=\"addText('options1')\">Next</button>"
-            );
-            break;
-        case "options1":
-            saveKey.progress = "options1";
-            $("#display").append(
-                "<h2>An Island</h2>"
-                + "<h3>Pick an option</h3>"
-                + "<p><a href=\"#\" onclick=\"addText('check1')\">Check Your Surroundings</a></p>"
-            );
-            break;
-        case "check1":
-            saveKey.progress = "check1";
-            saveKey.wood = 0;
-            $("#display").append(
-                "<h2>An Island</h2>"
-                + "<p>There are a lot of trees.</p>"
-                + "<button onclick=\"addText('home1')\">Next</button>"
-            );
-            break;
-        case "home1":
-            saveKey.progress = "home1";
-            $("#display").append(
-                "<h2>An Island</h2>"
-                + "<p><a href=\"#\" onclick=\"wood()\">Chop Some Wood</a></p>"
-            );
-            break;
+function timeItself() {
+    var dfd = new $.Deferred();
+    var date = new Date();
+    var hour = date.getHours()
+    var minute = date.getMinutes().toString();
+    if (hour > 12) {
+        hour -= 12;
+        hour = hour.toString();
+        var after = "P.M.";
+    } else {
+        var after = "A.M.";
     }
+    if (minute < 10) {
+        minute = "0" + minute;
+    }
+    var time = hour + ":" + minute + " " + after;
+    dfd.resolve(time);
+    return dfd.promise();
 }
 
 function saveDown() {
@@ -108,14 +82,19 @@ function saveDown() {
 }
 
 function load() {
-    var dfd = new $.Deferred();
     var saveTemp = atob(localStorage.getItem("save"));
     saveKey = JSON.parse(saveTemp);
     addText(saveKey.progress);
-    loadFurther();
-    $("#display").show();
-    dfd.resolve("Load successful!");
-    return dfd.promise();
+    set_health(saveKey.health);
+    set_hunger(saveKey.hunger);
+    set_wood(saveKey.wood);
+    start_clock();
+    $("#saving").show();
+    if (saveKey.progress != "intro1" && saveKey.progress != "intro2") {
+        $("#hunger").show();
+        $("#health").show();
+        $("#time").show();
+    }
 }
 
 function nameSubmit() {
@@ -123,5 +102,4 @@ function nameSubmit() {
     $("#name").hide();
     $("#saving").show();
     addText("intro1");
-    $("#display").show();
 }

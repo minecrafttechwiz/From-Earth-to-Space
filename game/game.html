@@ -8,6 +8,9 @@
         <script src="https://code.jquery.com/jquery-3.0.0.min.js"></script>
         <link rel="stylesheet" href="style.css" type="text/css" />
         <script src="main.js"></script>
+        <script src="crafting.js"></script>
+        <script src="materials.js"></script>
+        <script src="storyline.js"></script>
         <title>Game | FETS</title>
     </head>
     <body>
@@ -18,7 +21,10 @@
             <div id="sidebar1">
                 <p id="health" class="all">Health: 100</p>
                 <p id="hunger" class="all">Hunger: 100</p>
-                <p id="time" class="all">Time: 0</p>
+                <p id="time" class="all">Time: </p>
+                <p id="tape" class="all">Tape: 10</p>
+                <p id="twigs" class="all">Twigs: 0</p>
+                <p id="wood" class="all">Wood: 0</p>
             </div>
             <div id="content">
                 <div id="name">
@@ -26,22 +32,21 @@
                     <input type="text" id="nameValue" value="Aiden">
                     <button id="nameSubmit" onclick="nameSubmit()">Submit</button>
                 </div>
-                <div id="display" class="all"></div>
+                <div id="display"></div>
             </div>
             <div id="sidebar"></div>
             <div id="footer">
                 <p>
-                    Copyright 2016 Brian Vo
-                    <button onclick="functionLoad('load')" id="load">Load Game</button>
+                    <p>Copyright 2016 Brian Vo</p>
                     <button onclick="functionLoad('save')" class="all" id="saving">Save Game</button>
                 </p>
             </div>
         </div>
     </body>
     <script>
-        if (!localStorage.save) {
-            $("#load").hide();
-        }
         $(".all").hide();
+        if (localStorage.save) {
+            load();
+        }
     </script>
 </html>
