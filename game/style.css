@@ -65,3 +65,7 @@ a:visited {
 a:hover {
     text-decoration: underline;
 }
+
+#items_display, #tools_display {
+    font-weight: bold;
+}
