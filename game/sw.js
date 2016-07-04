@@ -3,6 +3,9 @@ var urlsToCache = [
     "/game/index.html",
     "/game/game.html",
     "/game/main.js",
+    "/game/storyline.js",
+    "/game/crafting.js",
+    "/game/materials.js",
     "/game/style.css"
 ];
 

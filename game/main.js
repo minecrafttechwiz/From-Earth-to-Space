@@ -1,31 +1,88 @@
-var saveKey = {health: 100, hunger: 100, wood: 0, twigs: 0, tools: {axe: 0, tape: 10}};
+window.saveKey = {tools: {}};
 
-function reset() {
-    var resetConfirm = confirm("Are you sure you want to reset? (All progress will be lost forever.)");
+function randomChance(material) {
+    switch (material) {
+        case "wood":
+            return Math.floor((Math.random() * 7) + 2);
+        case "twigs":
+            return Math.floor((Math.random() * 5) + 2);
+        case "dirt":
+            do { x = Math.floor((Math.random() * 30) + 1); }
+            while (x < 10);
+            return x;
+        case "water":
+            do { x = Math.floor((Math.random() * 15) + 1); }
+            while (x < 10);
+            return x;
+        case "wooden_axe":
+            do { x = Math.floor((Math.random() * 20) + 1); }
+            while (x < 10);
+            return x;
+        case "wooden_shovel":
+            do { x = Math.floor((Math.random() * 15) + 1); }
+            while (x < 5);
+            return x;
+        case "wooden_bucket":
+            do { x = Math.floor((Math.random() * 10) + 1); }
+            while (x < 5);
+            return x;
+        default:
+            return Math.floor((Math.random() * 100) + 1);
+    }
+}
+
+function load() {
+    var saveTemp1 = atob(localStorage.getItem("save"));
+    saveTemp2 = JSON.parse(saveTemp1);
+    initGame("load", saveTemp2)
+    addText(saveKey.progress);
+    start_clock();
+    $("#saving").show();
+    $("#items_display").show();
+    $("#tools_display").show();
+    showItems();
+}
+
+function reset(resetConfirmNeeded) {
+    if (resetConfirmNeeded) {
+        var resetConfirm = confirm("Are you sure you want to reset? (All progress will be lost forever.)");
+    } else {
+        var resetConfirm = true;
+    }
     if (resetConfirm == true) {
-        saveKey = {health: 100, hunger: 100, wood: 0};
+        console.log("starting reset");
+        initGame();
         addText("name");
         localStorage.removeItem("save");
-        notify("Reset Complete");
+        $(".all").hide();
+        if (resetConfirmNeeded) {
+            notify("Reset Complete");
+        }
     } else {
         notify("Reset Averted");
     }
 }
 
-function start_clock() {
-    setTimeout(function() {
-        var clock = timeItself();
-        clock.done(function(newTime){
-            saveKey.time = newTime;
-            $("#time").text("Time: " + newTime);
-        });
-        start_clock();
-    }, 50);
-}
-
-function notify(message) {
-    $("#sidebar").append("<p class='side'>" + message + "</p>");
-    $(".side").fadeOut(3000);
+function timeItself() {
+    var dfd = new $.Deferred();
+    var date = new Date();
+    var hour = date.getHours()
+    var minute = date.getMinutes().toString();
+    if (hour > 12) {
+        hour -= 12;
+        hour = hour.toString();
+        var after = "P.M.";
+    } else if (hour == 12) {
+        var after = "P.M.";
+    } else {
+        var after = "A.M.";
+    }
+    if (minute < 10) {
+        minute = "0" + minute;
+    }
+    var time = hour + ":" + minute + " " + after;
+    dfd.resolve(time);
+    return dfd.promise();
 }
 
 function functionLoad(func) {
@@ -42,59 +99,25 @@ function functionLoad(func) {
     });
 }
 
-function randomChance(material) {
-    switch (material) {
-        case "wood":
-            return Math.floor((Math.random() * 7) + 1);
-            break;
-        default:
-            return Math.round(Math.random()) * 100;
-    }
-}
-
-function timeItself() {
-    var dfd = new $.Deferred();
-    var date = new Date();
-    var hour = date.getHours()
-    var minute = date.getMinutes().toString();
-    if (hour > 12) {
-        hour -= 12;
-        hour = hour.toString();
-        var after = "P.M.";
-    } else {
-        var after = "A.M.";
-    }
-    if (minute < 10) {
-        minute = "0" + minute;
-    }
-    var time = hour + ":" + minute + " " + after;
-    dfd.resolve(time);
-    return dfd.promise();
-}
-
 function saveDown() {
     var dfd = new $.Deferred();
-    var saveTemp = btoa(JSON.stringify(saveKey));
-    localStorage.setItem("save", saveTemp);
+    var saveTemp1 = initGame('save');
+    var saveTemp2 = btoa(JSON.stringify(saveTemp1));
+    localStorage.setItem("save", saveTemp2);
     $("#load").show();
     dfd.resolve("Save successful!");
     return dfd.promise();
 }
 
-function load() {
-    var saveTemp = atob(localStorage.getItem("save"));
-    saveKey = JSON.parse(saveTemp);
-    addText(saveKey.progress);
-    set_health(saveKey.health);
-    set_hunger(saveKey.hunger);
-    set_wood(saveKey.wood);
-    start_clock();
-    $("#saving").show();
-    if (saveKey.progress != "intro1" && saveKey.progress != "intro2") {
-        $("#hunger").show();
-        $("#health").show();
-        $("#time").show();
-    }
+function start_clock() {
+    setTimeout(function() {
+        var clock = timeItself();
+        clock.done(function(newTime){
+            saveKey.time = newTime;
+            $("#time_display").text("Time: " + newTime);
+        });
+        start_clock();
+    }, 50);
 }
 
 function nameSubmit() {
@@ -102,4 +125,39 @@ function nameSubmit() {
     $("#name").hide();
     $("#saving").show();
     addText("intro1");
+}
+
+function showTools() {
+    $(".item_display").hide();
+    if (saveKey.progressNum > 4) {
+        $("#wooden_axe_display").show();
+        $("#wooden_shovel_display").show();
+        if (saveKey.progressNum > 5) {
+            $("#wooden_bucket_display").show();
+        }
+    }
+}
+
+function showItems() {
+    $(".tool_display").hide();
+    if (saveKey.progressNum > 1) {
+        $("#hunger_display").show();
+        $("#health_display").show();
+        $("#time_display").show();
+        $("#tape_display").show();
+        if (saveKey.progressNum > 2) {
+            $("#wood_display").show();
+            $("#twigs_display").show();
+            if (saveKey.progressNum > 4) {
+                $("#dirt_display").show();
+                $("#water_display").show();
+                $("#mud_display").show();
+            }
+        }
+    }
+}
+
+function notify(message) {
+    $("#sidebar").append("<p class='side'>" + message + "</p>");
+    $(".side").fadeOut(3000);
 }

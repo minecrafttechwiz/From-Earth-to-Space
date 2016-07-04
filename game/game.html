@@ -8,6 +8,7 @@
         <script src="https://code.jquery.com/jquery-3.0.0.min.js"></script>
         <link rel="stylesheet" href="style.css" type="text/css" />
         <script src="main.js"></script>
+        <script src="init.js"></script>
         <script src="crafting.js"></script>
         <script src="materials.js"></script>
         <script src="storyline.js"></script>
@@ -19,12 +20,20 @@
                 <h1>From Earth to Space: a Survival Adventure</h1>
             </div>
             <div id="sidebar1">
-                <p id="health" class="all">Health: 100</p>
-                <p id="hunger" class="all">Hunger: 100</p>
-                <p id="time" class="all">Time: </p>
-                <p id="tape" class="all">Tape: 10</p>
-                <p id="twigs" class="all">Twigs: 0</p>
-                <p id="wood" class="all">Wood: 0</p>
+                <a id="items_display" class="all" href="#" onclick="showItems()">Items</a>
+                <a id="tools_display" class="all" href="#" onclick="showTools()">Tools</a>
+                <p id="health_display" class="all item_display">Health: 100</p>
+                <p id="hunger_display" class="all item_display">Hunger: 100</p>
+                <p id="time_display" class="all item_display">Time: </p>
+                <p id="tape_display" class="all item_display">Tape: 10</p>
+                <p id="wood_display" class="all item_display">Wood: 0</p>
+                <p id="twigs_display" class="all item_display">Twigs: 0</p>
+                <p id="dirt_display" class="all item_display">Dirt: 0</p>
+                <p id="water_display" class="all item_display">Water: 0</p>
+                <p id="mud_display" class="all item_display">Mud: 0</p>
+                <p id="wooden_axe_display" class="all tool_display">Wooden Axe: 0 Durability</p>
+                <p id="wooden_shovel_display" class="all tool_display">Wooden Shovel: 0 Durability</p>
+                <p id="wooden_bucket_display" class="all tool_display">Wooden Bucket: 0 Durability</p>
             </div>
             <div id="content">
                 <div id="name">
@@ -38,6 +47,7 @@
             <div id="footer">
                 <p>
                     <p>Copyright 2016 Brian Vo</p>
+                    <button onclick="reset(true)" id="reset">Reset Game</button>
                     <button onclick="functionLoad('save')" class="all" id="saving">Save Game</button>
                 </p>
             </div>
@@ -47,6 +57,8 @@
         $(".all").hide();
         if (localStorage.save) {
             load();
+        } else {
+            reset(false);
         }
     </script>
 </html>
