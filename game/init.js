@@ -1,4 +1,4 @@
-var items =     ["health", "hunger", "tape", "twigs", "wood"      , "dirt"         , "water"        , "mud"];
+var items =     ["health", "hunger", "tape", "twigs", "wood"      , "dirt"         , "water"        , "muds"];
 var itemTools = [""      , ""      , ""    , ""     , "wooden_axe", "wooden_shovel", "wooden_bucket", ""];
 var tools = ["wooden_axe", "wooden_shovel", "wooden_bucket"];
 
